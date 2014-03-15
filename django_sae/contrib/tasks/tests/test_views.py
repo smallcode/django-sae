@@ -6,8 +6,6 @@ from django_sae.contrib.tasks.tests.operations import TaskOperationMock
 
 
 class ViewsTest(TestCase):
-    urls = 'django_sae.contrib.tasks.urls'
-
     def setUp(self):
         self.operation = TaskOperationMock('foo')
         self.key = self.operation.get_key()

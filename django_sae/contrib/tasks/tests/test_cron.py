@@ -5,8 +5,6 @@ from django_sae.contrib.tasks.tests.base import CronViewTestMixin
 
 
 class CronViewTest(CronViewTestMixin):
-    urls = 'django_sae.contrib.tasks.tests.urls'
-
     def test_router_return_none(self):
         response = self.client.get('/mock')
         self.assertResult(response, 3)

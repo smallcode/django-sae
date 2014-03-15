@@ -5,7 +5,6 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-
 # Quick-start development settings - unsuitable for production
 
 SECRET_KEY = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
@@ -16,25 +15,23 @@ INTERNAL_IPS = ['127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
-    'django_sae',
+    'django_sae.contrib.patches',
+    'django_sae.contrib.tasks',
     'tests',
 ]
 
-MEDIA_URL = '/media/'   # Avoids https://code.djangoproject.com/ticket/21451
+MEDIA_URL = '/media/'  # Avoids https://code.djangoproject.com/ticket/21451
 
 MIDDLEWARE_CLASSES = [
 ]
 
 ROOT_URLCONF = 'tests.urls'
 
-
 # Cache and database
 
 CACHES = {
     'default': {
-        'BACKEND': 'django_sae.cache.backends.SaePyLibMCCache',
-        'TIMEOUT': 86400,
-        'VERSION': 1,
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 }
 
@@ -44,12 +41,9 @@ DATABASES = {
     }
 }
 
-import sys
-import sae.memcache
+from django_sae.contrib.patches.environ import patch_http_host
+from django_sae.contrib.patches.modules import patch_pylibmc
 
-# Add dummy pylibmc module,本地测试用
-sys.modules['pylibmc'] = sae.memcache
+patch_http_host()
+patch_pylibmc()
 
-
-# 设置本地TaskQueue测试时需要的参数，否则test时client会出错
-os.environ.setdefault('HTTP_HOST', 'localhost:8080')

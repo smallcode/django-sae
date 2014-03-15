@@ -52,7 +52,7 @@ class TaskOperationMixin(object):
 
     @staticmethod
     def get_execute_uri(key):
-        return reverse('execute', kwargs={'key': key}, current_app='django_sae.contrib.tasks')
+        return reverse('tasks:execute', kwargs={'key': key})
 
     def as_task(self, **kwargs):
         key = self.get_key()
