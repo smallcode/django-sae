@@ -1,8 +1,6 @@
 # coding=utf-8
 from django.conf import settings
 
-from django_sae.contrib.patches.settings import patch_caches
-
 
 def patch_root_urlconf():
     from django.conf.urls import include, patterns, url
@@ -17,8 +15,3 @@ def patch_root_urlconf():
                                               url(r'^tasks/', include('django_sae.contrib.tasks.urls', 'tasks', 'tasks')),
         ) + urlconf_module.urlpatterns
         clear_url_caches()
-
-
-def patch_all():
-    patch_root_urlconf()
-    patch_caches()

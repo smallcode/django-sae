@@ -1,5 +1,5 @@
 # coding=utf-8
-from .patches import patch_all
+from django_sae.contrib.tasks import settings as t_settings
 
 
-patch_all()
+t_settings.patch_root_urlconf()
