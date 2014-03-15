@@ -1,7 +1,10 @@
 # coding=utf-8
 from django.conf import settings
-
 from django_sae.conf import settings as sae_settings
+from .environ import patch_disable_fetchurl
+from .local import patch_local
+
+DISABLE_FETCHURL = getattr(settings, 'DISABLE_FETCHURL', False)
 
 
 def is_local_mem_cache():
@@ -45,3 +48,13 @@ def patch_syncdb(name, user, password):
     from sae._restful_mysql import monkey
 
     monkey.patch()
+
+
+def patch_all():
+    patch_caches()
+    if sae_settings.IN_SAE:
+        patch_databases()
+        if DISABLE_FETCHURL:
+            patch_disable_fetchurl()
+    else:
+        patch_local()
