@@ -41,9 +41,6 @@ DATABASES = {
     }
 }
 
-from django_sae.contrib.patches.environ import patch_http_host
-from django_sae.contrib.patches.modules import patch_pylibmc
+from django_sae.contrib.patches.local import patch_local
 
-patch_http_host()
-patch_pylibmc()
-
+patch_local()
