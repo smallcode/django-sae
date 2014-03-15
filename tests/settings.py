@@ -2,8 +2,16 @@
 """Django settings for tests."""
 
 import os
+from django_sae.conf.settings import IN_SAE, STATIC_URL, TIME_ZONE, USE_TZ, LANGUAGE_CODE, USE_I18N
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+IN_SAE = IN_SAE
+STATIC_URL = STATIC_URL
+TIME_ZONE = TIME_ZONE
+USE_TZ = USE_TZ
+LANGUAGE_CODE = LANGUAGE_CODE
+USE_I18N = USE_I18N
 
 # Quick-start development settings - unsuitable for production
 
