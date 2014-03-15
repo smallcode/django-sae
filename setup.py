@@ -18,7 +18,6 @@ packages = [
 
 requires = [
     'django>=1.6.2,<1.7',
-    'sae-python-dev>=1.3.2',
 ]
 
 with open('README.md') as f:
