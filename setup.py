@@ -9,9 +9,11 @@ except ImportError:
 
 packages = [
     'django_sae',
+    'django_sae.conf',
     'django_sae.cache',
     'django_sae.contrib',
     'django_sae.contrib.tasks',
+    'django_sae.contrib.patches',
     'django_sae.db',
     'django_sae.utils',
 ]
