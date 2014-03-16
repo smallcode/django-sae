@@ -12,4 +12,4 @@ def patch_disable_fetchurl():
     """ 禁用掉fetchurl服务， 使用socket服务来处理请求，如此一来，可进行follow操作（如果用fetchurl服务，则无法进行follow操作）
         参见：http://sae.sina.com.cn/?m=devcenter&catId=291
     """
-    os.environ['disable_fetchurl'] = True
+    os.environ['disable_fetchurl'] = '1'
