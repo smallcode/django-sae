@@ -68,7 +68,7 @@ def patch_syncdb(name, user, password):
 def patch_all():
     patch_caches()
     if is_in_sae():
-        patch_databases()
+        # patch_databases()  # 无法使用
         patch_databases_routers()
         if is_disable_fetchurl():
             patch_disable_fetchurl()
