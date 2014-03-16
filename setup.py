@@ -13,7 +13,9 @@ packages = [
     'django_sae.cache',
     'django_sae.contrib',
     'django_sae.contrib.tasks',
+    'django_sae.contrib.tasks.tests',
     'django_sae.contrib.patches',
+    'django_sae.contrib.patches.tests',
     'django_sae.db',
     'django_sae.utils',
 ]
