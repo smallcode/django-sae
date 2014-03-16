@@ -1,10 +1,12 @@
 # coding=utf-8
 from cStringIO import StringIO
 import os
+
 from django.core.management import CommandError
 from django.test import TestCase
 from django.test.utils import override_settings
-from django_sae.contrib.commands.management.commands import updatepackages
+
+from django_sae.management.commands import updatepackages
 
 
 class UpdatePackagesTestCase(TestCase):
