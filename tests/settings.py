@@ -2,16 +2,9 @@
 """Django settings for tests."""
 
 import os
-from django_sae.conf.settings import IN_SAE, STATIC_URL, TIME_ZONE, USE_TZ, LANGUAGE_CODE, USE_I18N
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-IN_SAE = IN_SAE
-STATIC_URL = STATIC_URL
-TIME_ZONE = TIME_ZONE
-USE_TZ = USE_TZ
-LANGUAGE_CODE = LANGUAGE_CODE
-USE_I18N = USE_I18N
 
 # Quick-start development settings - unsuitable for production
 
@@ -23,7 +16,6 @@ INTERNAL_IPS = ['127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
-    'django_sae.contrib.patches',
     'django_sae.contrib.tasks',
     'tests',
 ]
@@ -49,6 +41,6 @@ DATABASES = {
     }
 }
 
-from django_sae.contrib.patches.local import patch_local
+from django_sae.conf.patches.local import patch_local
 
 patch_local()

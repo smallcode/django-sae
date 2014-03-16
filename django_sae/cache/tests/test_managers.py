@@ -1,7 +1,7 @@
 # coding=utf-8
 from django_sae.cache.managers import Manager
-from tests.cache.base import CacheTestBase
-from tests.cache.models import ManagerModelMock
+from django_sae.cache.tests.base import CacheTestBase
+from django_sae.cache.tests.models import ManagerModelMock
 
 
 class ManagerMock(ManagerModelMock):

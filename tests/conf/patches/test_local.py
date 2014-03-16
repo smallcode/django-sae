@@ -1,10 +1,11 @@
 # coding=utf-8
 import os
 import sys
-import sae.memcache
 
+import sae.memcache
 from django.test import SimpleTestCase
-from django_sae.contrib.patches import local
+
+from django_sae.conf.patches import local
 
 
 class LocalTestCase(SimpleTestCase):

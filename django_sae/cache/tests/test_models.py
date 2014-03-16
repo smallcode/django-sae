@@ -1,8 +1,8 @@
 # coding=utf-8
 import time
 
-from tests.cache.base import ModelTestBase
-from tests.cache.models import ModelMock
+from django_sae.cache.tests.base import ModelTestBase
+from django_sae.cache.tests.models import ModelMock
 
 
 class ModelTest(ModelTestBase):

@@ -1,8 +1,9 @@
 # coding=utf-8
-from django.test import SimpleTestCase
 import os
 
-from django_sae.contrib.patches import environ
+from django.test import SimpleTestCase
+
+from django_sae.conf.patches import environ
 
 
 class EnvironTestCase(SimpleTestCase):

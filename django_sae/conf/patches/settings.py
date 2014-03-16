@@ -1,7 +1,8 @@
 # coding=utf-8
 from django.conf import settings
+
 from django_sae.conf import settings as sae_settings
-from .environ import patch_disable_fetchurl
+from django_sae.conf.patches.environ import patch_disable_fetchurl
 
 
 def is_in_sae():
