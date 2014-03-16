@@ -17,6 +17,8 @@ packages = [
     'django_sae.contrib.tasks',
     'django_sae.contrib.tasks.tests',
     'django_sae.contrib.commands',
+    'django_sae.contrib.commands.management',
+    'django_sae.contrib.commands.management.commands',
     'django_sae.db',
     'django_sae.utils',
 ]

@@ -3,7 +3,7 @@
 Release History
 ---------------
 
-0.1.9 (2014-03-17)
+0.1.11 (2014-03-17)
 ++++++++++++++++++
 
 - commands（扩展命令）: updatepackages（更新依赖库并压缩为site-packages.zip）
