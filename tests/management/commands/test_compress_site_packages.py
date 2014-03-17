@@ -6,7 +6,7 @@ from django.core.management import CommandError
 from django.test import TestCase
 from django.test.utils import override_settings
 
-from django_sae.management.commands import updatepackages
+from django_sae.management.commands import compress_site_packages
 
 
 class UpdatePackagesTestCase(TestCase):
@@ -20,7 +20,7 @@ class UpdatePackagesTestCase(TestCase):
 
     @override_settings(PACKAGES_DIR='tests')
     def test_command(self):
-        command = updatepackages.Command()
+        command = compress_site_packages.Command()
         zip_name = 'site-packages.zip'
         command.execute(zip_name=zip_name, stdout=self.stdout)
         command_output = self.stdout.getvalue().strip()
@@ -30,6 +30,6 @@ class UpdatePackagesTestCase(TestCase):
 
     @override_settings(PACKAGES_DIR=None)
     def test_command_without_packages_dir(self):
-        command = updatepackages.Command()
+        command = compress_site_packages.Command()
         with self.assertRaises(CommandError):
             command.execute(stdout=self.stdout, stderr=self.stderr)
