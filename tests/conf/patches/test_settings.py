@@ -60,20 +60,3 @@ class SettingsTestCase(SimpleTestCase):
         # self.assertEqual(settings.DATABASES, sae_settings.DATABASES)
         self.assertEqual(settings.DATABASE_ROUTERS, sae_settings.DATABASE_ROUTERS)
         self.assertEqual(os.environ.get('disable_fetchurl'), '1')
-
-    def test_patch_syncdb(self):
-        name = 'name'
-        user = 'user'
-        password = 'password'
-        p_settings.patch_syncdb(name, user, password)
-        self.assertEqual(settings.DATABASES, {
-            'default': {
-                'ENGINE': 'django.db.backends.mysql',
-                'NAME': name,
-                'USER': user,
-                'PASSWORD': password,
-                'HOST': 'w.rdc.sae.sina.com.cn',
-                'PORT': '3307',
-                'OPTIONS': {'init_command': "SET storage_engine=MYISAM;"},
-            }})
-        self.assertEqual(settings.DATABASE_ROUTERS, [])

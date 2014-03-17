@@ -1,5 +1,5 @@
 # coding=utf-8
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import NoArgsCommand, CommandError
 from django.conf import settings
 import os
 import zipfile
@@ -23,11 +23,15 @@ def zip_folder(folder_dir, zip_name, include_empty_folder=True):
     zip_file.close()
 
 
-class Command(BaseCommand):
-    def handle(self, *args, **options):
+class Command(NoArgsCommand):
+    help = "Compress site-packages folder to a zip file."
+    usage_str = "Usage: ./manage.py compress_site_packages"
+
+    def handle(self, zip_name=None, **options):
         folder_dir = getattr(settings, 'PACKAGES_DIR', None)
         if folder_dir is None:
             raise CommandError('PACKAGES_DIR is None, it should be set in settings')
-        zip_name = options.get('zip_name', 'site-packages%s.zip' % int(time.time()))
+        if zip_name is None:
+            zip_name = 'site-packages%s.zip' % int(time.time())
         zip_folder(folder_dir, zip_name)
-        self.stdout.write("update and compress to file: %s success" % zip_name)
+        self.stdout.write("compressed success:%s" % zip_name)
