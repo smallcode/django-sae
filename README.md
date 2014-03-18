@@ -20,6 +20,7 @@
 ### 数据库
 如需数据库读写操作分离，请在settings中进行如下设置:
 ```python
+    from sae.const import MYSQL_HOST, MYSQL_HOST_S, MYSQL_PORT, MYSQL_USER, MYSQL_PASS, MYSQL_DB
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
