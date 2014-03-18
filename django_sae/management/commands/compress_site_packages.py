@@ -28,14 +28,6 @@ def zip_folder(folder_path, zip_name, include_empty_folder=True, check_root=None
     zip_file.close()
 
 
-def modify_file(file_name, pattern, replace):
-    with open(file_name) as rf:
-        text = rf.read()
-        text = re.sub(pattern, replace, text)
-        with open(file_name, 'w') as wf:
-            wf.write(text)
-
-
 class Command(NoArgsCommand):
     help = "Compress site-packages folder to a zip file."
     usage_str = "Usage: ./manage.py compress_site_packages"
@@ -66,9 +58,12 @@ class Command(NoArgsCommand):
     @staticmethod
     def replace_site_packages(path, name):
         if os.path.exists(path):
-            modify_file(path,
-                        "sys.path.insert\(0, os.path.join\(root, '.+'\)\)",
-                        "sys.path.insert(0, os.path.join(root, '%s'))" % name)
+            with open(path) as rf:
+                text = rf.read()
+                m = re.search("sys.path.insert\(0, os.path.join\(root, '(?P<name>.+)'\)\)", text)
+                if m:
+                    with open(path, 'w') as wf:
+                        wf.write(text.replace(m.group('name'), name))
 
     def handle(self, path=None, name=None, **options):
         if path is None:
