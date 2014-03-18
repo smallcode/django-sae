@@ -3,10 +3,14 @@ from django.conf import settings
 from django.core.management.base import CommandError
 
 
+def get_app_name():
+    return settings.ROOT_URLCONF.split('.')[0]
+
+
 def patch_for_sae_restful_mysql():
     host = getattr(settings, 'MYSQL_HOST', 'w.rdc.sae.sina.com.cn')
     port = getattr(settings, 'MYSQL_PORT', '3307')
-    name = getattr(settings, 'MYSQL_DB', '_'.join(['app', settings.ROOT_URLCONF.split('.')[0]]))
+    name = getattr(settings, 'MYSQL_DB', '_'.join(['app', get_app_name()]))
     user = getattr(settings, 'MYSQL_USER', None)
     password = getattr(settings, 'MYSQL_PASS', None)
     if name is None or user is None or password is None:

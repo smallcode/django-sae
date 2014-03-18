@@ -3,9 +3,12 @@ import os
 import sys
 import zipfile
 import time
+import re
 from distutils.sysconfig import get_python_lib
+from django.conf import settings
 from django.core.management.base import NoArgsCommand
 from django_extensions.management.commands import clean_pyc, compile_pyc
+from django_sae.management.commands import get_app_name
 
 
 def zip_folder(folder_path, zip_name, include_empty_folder=True, filter_root=None, filter_file=None):
@@ -30,6 +33,14 @@ def zip_folder(folder_path, zip_name, include_empty_folder=True, filter_root=Non
     zip_file.close()
 
 
+def modify_file(file_name, pattern, replace):
+    with open(file_name) as rf:
+        text = rf.read()
+        text = re.sub(pattern, replace, text)
+        with open(file_name, 'w') as wf:
+            wf.write(text)
+
+
 class Command(NoArgsCommand):
     help = "Compress site-packages folder to a zip file."
     usage_str = "Usage: ./manage.py compress_site_packages"
@@ -37,6 +48,34 @@ class Command(NoArgsCommand):
                       "werkzeug", "prettytable", "yaml", "argparse", "grizzled", "sqlcmd", "enum",
                       "test", "tests", "_mysql", "_mysql_exceptions", "_mysql",
                       "easy_install", "pkg_resources")
+
+    @classmethod
+    def filter_root(cls, root):
+        module_name = root.split(os.path.sep)[0]
+        if module_name in cls.filter_modules or ".egg" in module_name:
+            return True
+        return False
+
+    @classmethod
+    def filter_file(cls, root, f):
+        if not root:
+            file_name, extend_name = os.path.splitext(f)
+            if file_name in cls.filter_modules or extend_name in ['.egg', '.txt', '.pth']:
+                return True
+        return False
+
+    @classmethod
+    def get_wsgi_file(cls):
+        return os.path.join(settings.BASE_DIR, get_app_name(), 'index.wsgi')
+
+    @classmethod
+    def replace_site_packages(cls, name):
+        wsgi_file = cls.get_wsgi_file()
+        if os.path.exists(wsgi_file):
+            modify_file(wsgi_file,
+                        "root, '.+'",
+                        "root, '%s'" % name)
+            # modify_file(wsgi_file, 'site-packages\d+.zip', name)
 
     def handle(self, path=None, name=None, **options):
         if path is None:
@@ -51,18 +90,6 @@ class Command(NoArgsCommand):
         else:
             compile_pyc.Command().execute(path=path)
 
-        def filter_root(root):
-            module_name = root.split(os.path.sep)[0]
-            if module_name in self.filter_modules or ".egg" in module_name:
-                return True
-            return False
-
-        def filter_file(root, f):
-            if not root:
-                file_name, extend_name = os.path.splitext(f)
-                if file_name in self.filter_modules or extend_name in ['.egg', '.txt', '.pth']:
-                    return True
-            return False
-
-        zip_folder(path, name, True, filter_root, filter_file)
+        zip_folder(path, name, True, self.filter_root, self.filter_file)
+        self.replace_site_packages(name)
         self.stdout.write("compressed success:%s" % name)

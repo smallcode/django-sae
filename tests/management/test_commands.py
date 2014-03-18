@@ -73,6 +73,8 @@ class CommandsTestCase(CommandTestBase):
         self.assertIn("compressed success", command_output)
         zip_name = command_output.split(':')[-1]
         self.assertTrue(os.path.exists(zip_name))
+        with open(command.get_wsgi_file()) as wsgi_file:
+            self.assertIn("sys.path.insert(0, os.path.join(root, '%s'))" % zip_name, wsgi_file.read())
         os.remove(zip_name)
 
     def test_sae_migrate(self):
