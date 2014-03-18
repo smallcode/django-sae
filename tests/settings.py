@@ -27,13 +27,7 @@ MIDDLEWARE_CLASSES = [
 
 ROOT_URLCONF = 'tests.urls'
 
-# Cache and database
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-    }
-}
+# database
 
 DATABASES = {
     'default': {
