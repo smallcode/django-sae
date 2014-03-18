@@ -4,11 +4,12 @@ from django.test.utils import override_settings
 from django.core.cache import cache
 
 
-@override_settings(CACHES={
-    'default': {
-        'BACKEND': 'zidong.cache.backends.SaePyLibMCCache',
-    }
-})
+@override_settings(
+    CACHES={
+        'default': {
+            'BACKEND': 'django_sae.cache.backends.SaePyLibMCCache',
+        }
+    })
 class CacheTest(TestCase):
     def test_cache(self):
         key = 'my_key'
