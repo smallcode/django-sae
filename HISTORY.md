@@ -3,6 +3,12 @@
 Release History
 ---------------
 
+0.1.13 (2014-03-18)
+++++++++++++++++++
+
+- 重命名扩展命令： updatepackages -> compress_site_packages，
+- 添加扩展命令：sae_migrate, sae_schemamigration, sae_syncdb
+
 0.1.11 (2014-03-17)
 ++++++++++++++++++
 
