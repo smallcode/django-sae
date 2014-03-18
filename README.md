@@ -10,10 +10,15 @@
 * sae_schemamigration：切换到SAE数据库，并进行schemamigration操作
 * sae_syncdb：切换到SAE数据库，并进行syncdb操作
 
-注：使用sae_migrate，sae_schemamigration，sae_syncdb，需在settings中设置MYSQL_DB，MYSQL_USER，MYSQL_PASS（用于切换到SAE数据库）。
+使用sae_migrate、sae_schemamigration、sae_syncdb等数据库相关的扩展命令时，请在settings中进行如下设置:
+```python
+    MYSQL_DB=u'SAE数据库名称'
+    MYSQL_USER=u'SAE数据库用户名称'
+    MYSQL_PASS=u'SAE数据库用户密码'
+```
 
 ### 缓存
-使用 SAE Memcache 服务，在settings中进行如下设置:
+使用 SAE Memcache 服务时，请在settings中进行如下设置:
 ```python
     CACHES={
         'default': {
