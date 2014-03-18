@@ -1,9 +1,10 @@
 # coding=utf-8
 import os
+import shutil
+from cStringIO import StringIO
 from django.conf import settings
 from django.core.management import CommandError
 from django.test import SimpleTestCase
-from cStringIO import StringIO
 from django.test.utils import override_settings
 from django_sae.management.commands import patch_for_sae_restful_mysql, sae_migrate, sae_schemamigration, sae_syncdb, \
     compress_site_packages
@@ -66,20 +67,13 @@ class PatchesTestCase(PatchTestBase):
     APP,
 ])
 class CommandsTestCase(CommandTestBase):
-    @override_settings(PACKAGES_DIR='tests')
-    def test_command(self):
+    def test_compress_site_packages(self):
         command = compress_site_packages.Command()
-        command_output = self.execute(command)
+        command_output = self.execute(command, path='tests', clean_pyc=True)
         self.assertIn("compressed success", command_output)
         zip_name = command_output.split(':')[-1]
         self.assertTrue(os.path.exists(zip_name))
         os.remove(zip_name)
-
-    @override_settings(PACKAGES_DIR=None)
-    def test_command_without_packages_dir(self):
-        command = compress_site_packages.Command()
-        with self.assertRaises(CommandError):
-            command.execute(stdout=self.stdout, stderr=self.stderr)
 
     def test_sae_migrate(self):
         command = sae_migrate.Command()
@@ -92,7 +86,7 @@ class CommandsTestCase(CommandTestBase):
         self.assertPatched()
         path = os.path.join(*(APP.split('.') + ['migrations']))
         self.assertTrue(os.path.exists(path))
-        # os.removedirs(path)
+        shutil.rmtree(path)
 
     def test_sae_syncdb(self):
         command = sae_syncdb.Command()
