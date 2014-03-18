@@ -8,28 +8,23 @@ from distutils.sysconfig import get_python_lib
 from django.conf import settings
 from django.core.management.base import NoArgsCommand
 from django_extensions.management.commands import clean_pyc, compile_pyc
-from django_sae.management.commands import get_app_name
 
 
-def zip_folder(folder_path, zip_name, include_empty_folder=True, filter_root=None, filter_file=None):
+def zip_folder(folder_path, zip_name, include_empty_folder=True, check_root=None, check_file=None):
     root_length = len(folder_path) + 1
-    empty_folders = []
     zip_file = zipfile.ZipFile(zip_name, "w", zipfile.ZIP_DEFLATED)
     for root, folders, files in os.walk(folder_path):
         short_root = root[root_length:]
-        if filter_root is not None and filter_root(short_root):
-            continue
-        empty_folders.extend([folder for folder in folders if os.listdir(os.path.join(root, folder)) == []])
-        for f in files:
-            if filter_file is not None and filter_file(short_root, f):
-                continue
-            file_name = os.path.join(root, f)
-            zip_file.write(file_name, file_name[root_length:])
-        if include_empty_folder:
-            for folder in empty_folders:
-                zif = zipfile.ZipInfo(os.path.join(root, folder) + "/")
-                zip_file.writestr(zif, "")
-        empty_folders = []
+        if check_root is None or check_root(short_root):
+            empty_folders = [folder for folder in folders if os.listdir(os.path.join(root, folder)) == []]
+            for f in files:
+                if check_file is None or check_file(short_root, f):
+                    file_name = os.path.join(root, f)
+                    zip_file.write(file_name, file_name[root_length:])
+            if include_empty_folder:
+                for folder in empty_folders:
+                    zif = zipfile.ZipInfo(os.path.join(root, folder) + "/")
+                    zip_file.writestr(zif, "")
     zip_file.close()
 
 
@@ -50,32 +45,30 @@ class Command(NoArgsCommand):
                       "easy_install", "pkg_resources")
 
     @classmethod
-    def filter_root(cls, root):
+    def check_root(cls, root):
         module_name = root.split(os.path.sep)[0]
         if module_name in cls.filter_modules or ".egg" in module_name:
-            return True
-        return False
+            return False
+        return True
 
     @classmethod
-    def filter_file(cls, root, f):
+    def check_file(cls, root, f):
         if not root:
             file_name, extend_name = os.path.splitext(f)
             if file_name in cls.filter_modules or extend_name in ['.egg', '.txt', '.pth']:
-                return True
-        return False
+                return False
+        return True
 
-    @classmethod
-    def get_wsgi_file(cls):
-        return os.path.join(settings.BASE_DIR, get_app_name(), 'index.wsgi')
+    @staticmethod
+    def get_wsgi_file():
+        return os.path.join(settings.BASE_DIR, 'index.wsgi')
 
-    @classmethod
-    def replace_site_packages(cls, name):
-        wsgi_file = cls.get_wsgi_file()
-        if os.path.exists(wsgi_file):
-            modify_file(wsgi_file,
-                        "root, '.+'",
-                        "root, '%s'" % name)
-            # modify_file(wsgi_file, 'site-packages\d+.zip', name)
+    @staticmethod
+    def replace_site_packages(path, name):
+        if os.path.exists(path):
+            modify_file(path,
+                        "sys.path.insert\(0, os.path.join\(root, '.+'\)\)",
+                        "sys.path.insert(0, os.path.join(root, '%s'))" % name)
 
     def handle(self, path=None, name=None, **options):
         if path is None:
@@ -90,6 +83,6 @@ class Command(NoArgsCommand):
         else:
             compile_pyc.Command().execute(path=path)
 
-        zip_folder(path, name, True, self.filter_root, self.filter_file)
-        self.replace_site_packages(name)
+        zip_folder(path, name, True, self.check_root, self.check_file)
+        self.replace_site_packages(self.get_wsgi_file(), name)
         self.stdout.write("compressed success:%s" % name)
