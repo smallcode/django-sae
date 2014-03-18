@@ -30,7 +30,8 @@ def zip_folder(folder_path, zip_name, include_empty_folder=True, filter_root_fun
 class Command(NoArgsCommand):
     help = "Compress site-packages folder to a zip file."
     usage_str = "Usage: ./manage.py compress_site_packages"
-    filter_name = ("_markerlib", "pip", "setuptools", "sae")
+    filter_packages = ("_markerlib", "pip", "setuptools", "sae", "MySQLdb", "lxml", "PIL",
+                       "werkzeug", "prettytable", "PyYAML", "argparse", "grizzled-python", "sqlcmd")
 
     def handle(self, path=None, name=None, **options):
         if path is None:
@@ -45,7 +46,7 @@ class Command(NoArgsCommand):
 
         def filter_root(root):
             package_name = root.split(os.path.sep)[0]
-            if not package_name or package_name in self.filter_name or ".egg-info" in package_name:
+            if not package_name or package_name in self.filter_packages or ".egg-info" in package_name:
                 return True
 
         zip_folder(path, name, True, filter_root)
