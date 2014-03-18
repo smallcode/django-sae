@@ -17,6 +17,32 @@
     MYSQL_PASS=u'SAE数据库用户密码'
 ```
 
+### 数据库
+如需数据库读写操作分离，请在settings中进行如下设置:
+```python
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': MYSQL_DB,
+            'USER': MYSQL_USER,
+            'PASSWORD': MYSQL_PASS,
+            'HOST': MYSQL_HOST,
+            'PORT': MYSQL_PORT,
+            'OPTIONS': {'init_command': "SET storage_engine=MYISAM;"},
+        },
+        'slave': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': MYSQL_DB,
+            'USER': MYSQL_USER,
+            'PASSWORD': MYSQL_PASS,
+            'HOST': MYSQL_HOST_S,
+            'PORT': MYSQL_PORT,
+            'OPTIONS': {'init_command': "SET storage_engine=MYISAM;"},
+        },
+    }
+    DATABASE_ROUTERS = ['django_sae.db.routers.MasterSlaveRouter']
+```
+
 ### 缓存
 使用 SAE Memcache 服务时，请在settings中进行如下设置:
 ```python
