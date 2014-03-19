@@ -10,6 +10,10 @@ sys.setdefaultencoding('utf8')
 # 是否在SAE引擎上运行
 IN_SAE = 'SERVER_SOFTWARE' in os.environ
 
+DEBUG = not IN_SAE
+
+TEMPLATE_DEBUG = DEBUG
+
 # 数据库
 DATABASES = {
     'default': {
