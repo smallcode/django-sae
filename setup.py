@@ -29,6 +29,7 @@ requires = [
     'django-debug-toolbar>=1.0.1',
     'pytz>=2014.1',
     'South>=0.8.4',
+    'pip>=1.5.4',
 ]
 
 with open('README.md') as f:
