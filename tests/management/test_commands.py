@@ -1,4 +1,5 @@
 # coding=utf-8
+from distutils.sysconfig import get_python_lib
 import os
 import shutil
 from cStringIO import StringIO
@@ -6,8 +7,10 @@ from django.conf import settings
 from django.core.management import CommandError
 from django.test import SimpleTestCase
 from django.test.utils import override_settings
-from django_sae.management.commands import patch_for_sae_restful_mysql, sae_migrate, sae_schemamigration, sae_syncdb, \
-    compress_site_packages
+import pip
+from pip.commands import UninstallCommand
+from django_sae.management.commands import (compress_site_packages, upgrade_requirements, patch_for_sae_restful_mysql,
+                                            sae_migrate, sae_schemamigration, sae_syncdb)
 
 MYSQL_USER = 'user'
 MYSQL_PASS = 'pass'
@@ -124,3 +127,20 @@ class CommandsTestCase(CommandTestBase):
         with self.assertRaises(Exception):
             self.execute(command)
         self.assertPatched()
+
+    def get_package_path(self, package):
+        return os.path.join(get_python_lib(), package)
+
+    def uninstall(self, package):
+        cmd_name, args = pip.parseopts(['uninstall', '--yes', package])
+        UninstallCommand().main(args)
+        self.assertFalse(os.path.exists(self.get_package_path(package)))
+
+    def test_upgrade_requirements(self):
+        package = 'requests'
+        command = upgrade_requirements.Command()
+        self.execute(command, requirements=['tests/requirements.txt'])
+        self.assertTrue(os.path.exists(self.get_package_path(package)))
+        self.uninstall(package)
+
+

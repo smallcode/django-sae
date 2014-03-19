@@ -1,0 +1,10 @@
+django>=1.6.2,<1.7
+
+# for local test upgrade packages command
+tests/downloads/requests-master.zip
+
+# the real package url
+# https://github.com/kennethreitz/requests/zipball/master#egg=requests
+
+# the invalid ur, will raise exception: Cannot find command 'git' in virtualenv
+# -e git+https://github.com/kennethreitz/requests.git@master#egg=requests
