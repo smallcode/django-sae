@@ -42,7 +42,8 @@ def patch_databases():
 
 
 def patch_databases_routers():
-    prepend_to_setting('DATABASE_ROUTERS', sae_settings.DATABASE_ROUTERS[0])
+    if sae_settings.IN_SAE:
+        prepend_to_setting('DATABASE_ROUTERS', sae_settings.DATABASE_ROUTERS[0])
 
 
 def patch_all():

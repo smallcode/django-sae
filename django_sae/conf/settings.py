@@ -37,7 +37,7 @@ DATABASES = {
 }
 
 # 读写分离
-DATABASE_ROUTERS = ['django_sae.db.routers.MasterSlaveRouter']
+DATABASE_ROUTERS = ['django_sae.db.routers.MasterSlaveRouter'] if IN_SAE else []
 
 # 缓存
 CACHES = {
