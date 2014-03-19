@@ -26,5 +26,5 @@ class Command(NoArgsCommand):
         [initial_args.extend(['--requirement', os.path.join(settings.BASE_DIR, req)]) for req in req_files]
         cmd_name, args = pip.parseopts(initial_args)
 
-        return InstallCommand().main(args)
+        InstallCommand().main(args)
 
