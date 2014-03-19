@@ -6,6 +6,7 @@
 
 ### 扩展命令
 * compress_site_packages：压缩 site_packages
+* upgrade_requirements：更新requirements.txt中所有依赖的库
 * sae_migrate：切换到SAE数据库，并进行migrate操作
 * sae_schemamigration：切换到SAE数据库，并进行schemamigration操作
 * sae_syncdb：切换到SAE数据库，并进行syncdb操作
