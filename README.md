@@ -8,15 +8,9 @@
 * compress_site_packages：压缩 site_packages
 * upgrade_requirements：更新requirements.txt中所有依赖的库
 * sae_migrate：切换到SAE数据库，并进行migrate操作
-* sae_schemamigration：切换到SAE数据库，并进行schemamigration操作
-* sae_syncdb：切换到SAE数据库，并进行syncdb操作
+* sae_syncdb：切换到SAE数据库，并进行syncdb+migrate操作
 
-使用sae_migrate、sae_schemamigration、sae_syncdb等数据库相关的扩展命令时，请在settings中进行如下设置:
-```python
-    MYSQL_DB=u'SAE数据库名称'
-    MYSQL_USER=u'SAE数据库用户名称'
-    MYSQL_PASS=u'SAE数据库用户密码'
-```
+使用sae_migrate、sae_syncdb等与数据库相关的扩展命令时，请手工获取SAE数据库的相关常数，如MYSQL_DB、MYSQL_USER、MYSQL_PASS等，并在settings中对DATABASES进行修改。
 
 ### 数据库
 如需数据库读写操作分离，请在settings中进行如下设置:
