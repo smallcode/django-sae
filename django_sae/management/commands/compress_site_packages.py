@@ -39,7 +39,7 @@ class Command(NoArgsCommand):
     @classmethod
     def check_root(cls, root):
         module_name = root.split(os.path.sep)[0]
-        if module_name in cls.filter_modules or ".egg" in module_name:
+        if module_name in cls.filter_modules or "." in module_name:
             return False
         return True
 
