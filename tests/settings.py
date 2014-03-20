@@ -16,6 +16,8 @@ INTERNAL_IPS = ['127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'south',
+    'django_sae',
     'django_sae.contrib.tasks',
     'tests',
 ]
@@ -38,3 +40,5 @@ DATABASES = {
 from django_sae.conf.patches.local import patch_local
 
 patch_local()
+
+# SOUTH_TESTS_MIGRATE=False
