@@ -2,9 +2,11 @@
 """Django settings for tests."""
 
 import os
+from django_sae.conf.settings import IN_SAE
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+DEBUG = not IN_SAE
 
 # Quick-start development settings - unsuitable for production
 
@@ -22,8 +24,6 @@ INSTALLED_APPS = [
     'tests',
 ]
 
-MEDIA_URL = '/media/'  # Avoids https://code.djangoproject.com/ticket/21451
-
 MIDDLEWARE_CLASSES = [
 ]
 
@@ -36,9 +36,5 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
     }
 }
-
-from django_sae.conf.patches.local import patch_local
-
-patch_local()
 
 # SOUTH_TESTS_MIGRATE=False

@@ -10,7 +10,6 @@ except ImportError:
 packages = [
     'django_sae',
     'django_sae.conf',
-    'django_sae.conf.patches',
     'django_sae.cache',
     'django_sae.cache.tests',
     'django_sae.contrib',
