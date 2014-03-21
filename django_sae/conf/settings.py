@@ -58,21 +58,42 @@ def patch_disable_fetchurl():
     os.environ['disable_fetchurl'] = '1'
 
 
-def patch_http_host(http_host='localhost'):
-    """ 设置环境变量HTTP_HOST，本地测试TaskQueue时需要该变量，仅用于本地测试
+def patch_task_queue(host='localhost', port=8080):
+    """ 用于虚拟SAE的TaskQueue服务，仅用于本地开发环境
     """
-    os.environ.setdefault('HTTP_HOST', http_host)
+    os.environ['HTTP_HOST'] = '%s:%d' % (host, port)
 
 
-def patch_pylibmc():
-    """ 伪装pylibmc模块，仅用于本地测试
+def patch_memcache():
+    """ 用于虚拟本地开发环境的Memcache服务，数据将保存在内存中
     """
     import sae.memcache
 
     sys.modules['pylibmc'] = sae.memcache
 
 
+def patch_kvdb(file_path):
+    """ 用于虚拟本地开发环境的KVDB服务，数据将保存到指定的文件中
+    """
+    os.environ['sae.kvdb.file'] = os.path.abspath(file_path)
+
+
+def patch_storage(file_path):
+    """ 用于虚拟本地开发环境的Storage服务，数据将保存到指定的文件中
+    """
+    os.environ['sae.storage.path'] = os.path.abspath(file_path)
+
+
+def patch_app_info(name, version='1'):
+    """ 用于虚拟环境变量APP_NAME和APP_VERSION
+    """
+    os.environ['APP_NAME'] = name
+    os.environ['APP_VERSION'] = version
+
+
 def patch_sae_restful_mysql():
+    """ 用于直接操作线上的数据库
+    """
     from sae._restful_mysql import monkey
 
     monkey.patch()
@@ -103,5 +124,5 @@ else:
     TEMPLATE_DEBUG = True
     DATABASE_ROUTERS = []
 
-    patch_pylibmc()
-    patch_http_host()
+    patch_memcache()
+    patch_task_queue()

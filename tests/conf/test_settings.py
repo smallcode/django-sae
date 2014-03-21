@@ -8,17 +8,33 @@ from django_sae.conf import settings
 
 
 class PatchesTestCase(SimpleTestCase):
-    def test_patch_http_host(self):
-        settings.patch_http_host()
-        self.assertEqual(os.environ.get('HTTP_HOST'), 'localhost')
-
     def test_patch_disable_fetchurl(self):
         settings.patch_disable_fetchurl()
         self.assertEqual(os.environ.get('disable_fetchurl'), '1')
 
-    def test_patch_pylibmc(self):
-        settings.patch_pylibmc()
+    def test_patch_task_queue(self):
+        settings.patch_task_queue()
+        self.assertEqual(os.environ.get('HTTP_HOST'), 'localhost:8080')
+
+    def test_patch_memcache(self):
+        settings.patch_memcache()
         self.assertEqual(sys.modules['pylibmc'], sae.memcache)
+
+    def test_patch_kvdb(self):
+        file_path = 'tests/kvdb'
+        settings.patch_kvdb(file_path)
+        self.assertEqual(os.environ['sae.kvdb.file'], os.path.abspath(file_path))
+
+    def test_patch_storage(self):
+        file_path = 'tests/storage'
+        settings.patch_storage(file_path)
+        self.assertEqual(os.environ['sae.storage.path'], os.path.abspath(file_path))
+
+    def test_patch_app_info(self):
+        name = 'django_sae'
+        settings.patch_app_info(name)
+        self.assertEqual(os.environ.get('APP_NAME'), name)
+        self.assertEqual(os.environ.get('APP_VERSION'), '1')
 
     def test_patch_sae_restful_mysql(self):
         settings.patch_sae_restful_mysql()
