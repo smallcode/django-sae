@@ -2,6 +2,6 @@
 
 
 __title__ = 'django_sae'
-__version__ = '0.1.22'
+__version__ = '0.1.28'
 __author__ = 'smallcode (45945756@qq.com)'
 __license__ = 'Apache 2.0'

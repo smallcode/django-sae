@@ -69,7 +69,7 @@ class Model(object):
 
     def save(self):
         if not self.is_expires:
-            log.debug(u'[缓存]{0}：{1}, 过期时间：{2}'.format(self.key, self.value, to_datetime(self.expired_at)))
+            log.debug(u'[{2}][缓存]{0}：{1}'.format(self.key, self.value, to_datetime(self.expired_at)))
             # times秒数如果大于30天，则需传入到期时间的时间戳(且必须为整数)
             cache.set(self.key, self.value, int(self.expired_at))
 
