@@ -22,7 +22,7 @@ def make_datetime(**kwargs):
     kwargs: days, seconds, microseconds, milliseconds, minutes, hours, weeks
     如：make_datetime(days=-1)
     """
-    return datetime.now() + timedelta(**kwargs)
+    return timezone.now() + timedelta(**kwargs)
 
 
 def make_timestamp(**kwargs):

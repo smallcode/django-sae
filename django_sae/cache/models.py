@@ -1,10 +1,8 @@
 # coding=utf-8
 from logging import getLogger
 
-from django.utils import timezone
 from django.core.cache import cache
-
-from django_sae.utils.timestamp import to_timestamp, to_datetime
+from django_sae.utils.timestamp import make_timestamp, to_datetime
 
 
 log = getLogger('django.cache')
@@ -41,17 +39,13 @@ class Model(object):
             values[attr] = value
         return values
 
-    @property
-    def _now(self):
-        return to_timestamp(timezone.now())
-
     def _get_expires_in(self):
         if self.expired_at:
-            return self.expired_at - self._now
+            return self.expired_at - make_timestamp()
 
     def _set_expires_in(self, expires_in):
         if expires_in:
-            self.expired_at = int(expires_in) + self._now
+            self.expired_at = int(expires_in) + make_timestamp()
 
     expires_in = property(_get_expires_in, _set_expires_in)
 
@@ -65,7 +59,7 @@ class Model(object):
     def is_expires(self):
         if self.expired_at is None:
             self.load_cache()
-        return self.expired_at is None or self._now >= self.expired_at
+        return self.expired_at is None or make_timestamp() >= self.expired_at
 
     def save(self):
         if not self.is_expires:
