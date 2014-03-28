@@ -1,13 +1,12 @@
 # coding=utf-8
 from django.http import HttpResponse
 from django.views.generic import View
+from django_sae.contrib.tasks.settings import PARALLEL_QUEUE_NAME
 from sae.taskqueue import TaskQueue
 
 
 class OperationView(View):
-    ORDER = 'order'
-    PARALLEL = 'parallel'
-    QUEUE_NAME = PARALLEL
+    QUEUE_NAME = PARALLEL_QUEUE_NAME
 
     @staticmethod
     def as_task(operation):
