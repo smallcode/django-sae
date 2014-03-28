@@ -36,7 +36,7 @@ CachedQueue = {}
 
 
 class TaskOperationMixin(object):
-    QUEUE_NAME = ORDER_QUEUE_NAME
+    QUEUE_NAME = PARALLEL_QUEUE_NAME
 
     @staticmethod
     def get_random_id(digits=8):
