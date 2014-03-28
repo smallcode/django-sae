@@ -1,5 +1,6 @@
 # coding=utf-8
 import os
+from unittest import skip
 import pip
 from pip.commands import UninstallCommand
 from distutils.sysconfig import get_python_lib
@@ -17,6 +18,7 @@ class UpgradeRequirementsTestCase(CommandTestBase):
         UninstallCommand().main(args)
         self.assertFalse(self.is_exists(package))
 
+    @skip(u'测试用时太久')
     def test_command(self):
         package = 'requests'
         command = upgrade_requirements.Command()
