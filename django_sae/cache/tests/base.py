@@ -1,9 +1,16 @@
 # coding=utf-8
+from django.test import SimpleTestCase
+from django.test.utils import override_settings
 from django.core.cache import cache
-from django.test import SimpleTestCase as TestCase
 
 
-class CacheTestBase(TestCase):
+@override_settings(
+    CACHES={
+        'default': {
+            'BACKEND': 'django_sae.cache.backends.SaePyLibMCCache',
+        }
+    })
+class CacheTestBase(SimpleTestCase):
     def tearDown(self):
         cache.clear()
 
