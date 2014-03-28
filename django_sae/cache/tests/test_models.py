@@ -27,10 +27,11 @@ class ModelTest(ModelTestBase):
         self.assertIsExpires(model)
         self.assertIsExpires(ModelMock('123', self.name))
 
-    def test_check_cache(self):
-        model = ModelMock(self.uid, self.name, self.expires_in)
-        model.save()
-        self.assertIsNotExpires(ModelMock(self.uid, self.name))
+    def test_load_cache(self):
+        ModelMock(self.uid, self.name, self.expires_in).save()
+        model = ModelMock(self.uid, self.name)
+        model.load_cache()
+        self.assertIsNotExpires(model)
 
     def test_is_expires(self):
         model = ModelMock(self.uid, self.name, expires_in=-1)

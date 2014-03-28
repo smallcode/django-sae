@@ -49,16 +49,17 @@ class Model(object):
 
     expires_in = property(_get_expires_in, _set_expires_in)
 
+    def load_values(self, **values):
+        for key, value in values.items():
+            setattr(self, key, value)
+
     def load_cache(self):
         values = cache.get(self.key)
         if values is not None:
-            for key, value in values.items():
-                setattr(self, key, value)
+            self.load_values(**values)
 
     @property
     def is_expires(self):
-        if self.expired_at is None:
-            self.load_cache()
         return self.expired_at is None or make_timestamp() >= self.expired_at
 
     def save(self):
