@@ -4,6 +4,7 @@ import time
 
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
+from django_sae.contrib.tasks.settings import ORDER_QUEUE_NAME, PARALLEL_QUEUE_NAME
 from sae.taskqueue import Task, TaskQueue
 
 
@@ -31,8 +32,12 @@ class OperationBase(object):
             self.next(response)
             return response
 
+CachedQueue = {}
+
 
 class TaskOperationMixin(object):
+    QUEUE_NAME = ORDER_QUEUE_NAME
+
     @staticmethod
     def get_random_id(digits=8):
         return 'r%d' % (int(time.time()) + random.randint(0, pow(10, digits) - 1))
@@ -59,16 +64,22 @@ class TaskOperationMixin(object):
         self.save_to_mc(key)
         return Task(self.get_execute_uri(key), **kwargs)
 
-    def execute_by_queue(self, queue_name='parallel', **kwargs):
+    @staticmethod
+    def get_queue(queue_name):
+        if queue_name not in CachedQueue:
+            CachedQueue[queue_name] = TaskQueue(queue_name)
+        return CachedQueue[queue_name]
+
+    def execute_by_queue(self, queue_name=QUEUE_NAME, **kwargs):
         task = self.as_task(**kwargs)
-        if task is not None:
-            return TaskQueue(queue_name).add(task)
+        queue = self.get_queue(queue_name)
+        return queue.add(task)
 
     def execute_by_order(self, **kwargs):
-        return self.execute_by_queue('order', **kwargs)
+        return self.execute_by_queue(ORDER_QUEUE_NAME, **kwargs)
 
     def execute_by_parallel(self, **kwargs):
-        return self.execute_by_queue('parallel', **kwargs)
+        return self.execute_by_queue(PARALLEL_QUEUE_NAME, **kwargs)
 
     @staticmethod
     def get_total_page(page_length, total_number):

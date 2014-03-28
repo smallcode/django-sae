@@ -35,7 +35,7 @@ class TaskOperationTest(TestCase):
         self.assertIsNotNone(cache.get(key))
 
     def test_execute_by_queue(self):
-        r = self.operation.execute_by_queue()
+        r = self.operation.execute_by_queue('test')
         self.assertTrue(r)
 
     def test_execute_by_order(self):
@@ -49,3 +49,6 @@ class TaskOperationTest(TestCase):
     def test_get_total_page(self):
         self.assertEqual(self.operation.get_total_page(10, 100), 10)
         self.assertEqual(self.operation.get_total_page(10, 99), 10)
+
+    def test_get_queue(self):
+        self.assertEqual(self.operation.get_queue('test'), self.operation.get_queue('test'))
