@@ -5,7 +5,8 @@ import time
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
 from django_sae.contrib.tasks.settings import ORDER_QUEUE_NAME, PARALLEL_QUEUE_NAME
-from sae.taskqueue import Task, TaskQueue
+from django_sae.utils.taskqueue import get_queue
+from sae.taskqueue import Task
 
 
 class OperationBase(object):
@@ -31,8 +32,6 @@ class OperationBase(object):
             self.save(response)
             self.next(response)
             return response
-
-CachedQueue = {}
 
 
 class TaskOperationMixin(object):
@@ -64,15 +63,9 @@ class TaskOperationMixin(object):
         self.save_to_mc(key)
         return Task(self.get_execute_uri(key), **kwargs)
 
-    @staticmethod
-    def get_queue(queue_name):
-        if queue_name not in CachedQueue:
-            CachedQueue[queue_name] = TaskQueue(queue_name)
-        return CachedQueue[queue_name]
-
     def execute_by_queue(self, queue_name=QUEUE_NAME, **kwargs):
         task = self.as_task(**kwargs)
-        queue = self.get_queue(queue_name)
+        queue = get_queue(queue_name)
         return queue.add(task)
 
     def execute_by_order(self, **kwargs):

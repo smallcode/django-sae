@@ -49,6 +49,3 @@ class TaskOperationTest(TestCase):
     def test_get_total_page(self):
         self.assertEqual(self.operation.get_total_page(10, 100), 10)
         self.assertEqual(self.operation.get_total_page(10, 99), 10)
-
-    def test_get_queue(self):
-        self.assertEqual(self.operation.get_queue('test'), self.operation.get_queue('test'))
