@@ -45,7 +45,3 @@ class TaskOperationTest(TestCase):
     def test_execute_by_parallel(self):
         r = self.operation.execute_by_parallel()
         self.assertTrue(r)
-
-    def test_get_total_page(self):
-        self.assertEqual(self.operation.get_total_page(10, 100), 10)
-        self.assertEqual(self.operation.get_total_page(10, 99), 10)

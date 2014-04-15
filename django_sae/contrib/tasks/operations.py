@@ -74,11 +74,6 @@ class TaskOperationMixin(object):
     def execute_by_parallel(self, **kwargs):
         return self.execute_by_queue(PARALLEL_QUEUE_NAME, **kwargs)
 
-    @staticmethod
-    def get_total_page(page_length, total_number):
-        quotient, remainder = divmod(total_number, page_length)
-        return quotient + int(remainder != 0)
-
 
 class TaskOperationBase(OperationBase, TaskOperationMixin):
     pass
