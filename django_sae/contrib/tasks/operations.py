@@ -76,7 +76,8 @@ class TaskOperationMixin(object):
 
     @staticmethod
     def get_total_page(page_length, total_number):
-        return total_number / page_length + int(total_number % page_length != 0)
+        quotient, remainder = divmod(total_number, page_length)
+        return quotient + int(remainder != 0)
 
 
 class TaskOperationBase(OperationBase, TaskOperationMixin):
