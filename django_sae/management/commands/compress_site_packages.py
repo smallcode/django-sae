@@ -7,7 +7,7 @@ import re
 from distutils.sysconfig import get_python_lib
 from django.conf import settings
 from django.core.management.base import NoArgsCommand
-from django_extensions.management.commands import clean_pyc, compile_pyc
+from django_extensions.management.commands import compile_pyc
 
 
 def zip_folder(folder_path, zip_name, include_empty_folder=True, check_root=None, check_file=None):
@@ -73,9 +73,7 @@ class Command(NoArgsCommand):
 
         # 用户可以上传和使用 .pyc 文件，注意 .pyc 文件必须是python2.7.3生成的，否则无效。
         # http://sae.sina.com.cn/doc/python/runtime.html#id3
-        if options.get("clean_pyc", sys.version_info[0:3] != (2, 7, 3)):
-            clean_pyc.Command().execute(path=path)
-        else:
+        if options.get("clean_pyc", sys.version_info[0:3] == (2, 7, 3)):
             compile_pyc.Command().execute(path=path)
 
         zip_folder(path, name, True, self.check_root, self.check_file)

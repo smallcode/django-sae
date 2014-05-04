@@ -1,4 +1,4 @@
-django>=1.6.2,<1.7
+#django>=1.6.2,<1.7
 
 # for local test upgrade packages command
 tests/downloads/requests-master.zip
