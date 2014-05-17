@@ -74,9 +74,9 @@ class Command(NoArgsCommand):
         # 用户可以上传和使用 .pyc 文件，注意 .pyc 文件必须是python2.7.3生成的，否则无效。
         # http://sae.sina.com.cn/doc/python/runtime.html#id3
         if options.get("clean_pyc", sys.version_info[0:3] != (2, 7, 3)):
-            clean_pyc.Command().execute(path=path, verbosity=1)
+            clean_pyc.Command().execute(path=path, verbosity=0)
         else:
-            compile_pyc.Command().execute(path=path, verbosity=1)
+            compile_pyc.Command().execute(path=path, verbosity=0)
 
         zip_folder(path, name, True, self.check_root, self.check_file)
         self.replace_site_packages(self.get_wsgi_file(), name)
