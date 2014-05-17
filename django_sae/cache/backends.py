@@ -1,6 +1,6 @@
 # coding=utf-8
-
-from django.core.cache.backends.memcached import BaseMemcachedCache, local
+from threading import local
+from django.core.cache.backends.memcached import BaseMemcachedCache
 
 
 class SaePyLibMCCache(BaseMemcachedCache):
