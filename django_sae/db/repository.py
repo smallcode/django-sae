@@ -23,6 +23,11 @@ class RepositoryBase(object):
 
     @classmethod
     def get_not_in(cls, id_field, ids):
+        """获取不存在于数据库的ID
+        :param id_field: ID字段名
+        :param ids: ID列表
+        :return: 不存在于数据库的ID
+        """
         kwargs = {'%s__in' % id_field: ids}
         exist_ids = cls.get_values_list(id_field, **kwargs)
         return [item_id for item_id in ids if item_id not in exist_ids]
