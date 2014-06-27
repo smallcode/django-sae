@@ -38,7 +38,7 @@ CACHES = {
     }
 }
 
-LANGUAGE_CODE = 'zh-cn'
+LANGUAGE_CODE = 'zh-hans'  # zh-cn从1.7版本后弃用
 
 USE_I18N = False  # 关闭多语言引擎，优化性能
 
