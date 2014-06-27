@@ -18,7 +18,6 @@ packages = [
     'django_sae.management',
     'django_sae.management.commands',
     'django_sae.db',
-    'django_sae.http',
     'django_sae.utils',
 ]
 
