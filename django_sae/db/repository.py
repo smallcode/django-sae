@@ -23,10 +23,9 @@ class RepositoryBase(object):
 
     @classmethod
     def get_not_in(cls, id_field, ids):
-        ids_set = set(ids)
         kwargs = {'%s__in' % id_field: ids}
         exist_ids = cls.get_values_list(id_field, **kwargs)
-        return ids_set - set(exist_ids)
+        return [item_id for item_id in ids if item_id not in exist_ids]
 
     @classmethod
     def get_pk_list(cls, **kwargs):
