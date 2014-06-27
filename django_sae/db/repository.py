@@ -15,11 +15,18 @@ class RepositoryBase(object):
     UPDATE_CHECK_FIELDS = []
 
     def distinct(self, items):
-        return dict([(self._get_item_pk(item), item) for item in items])
+        return {self._get_item_pk(item): item for item in items}
 
     @classmethod
     def get_values_list(cls, *fields, **kwargs):
         return cls.Model.objects.filter(**kwargs).values_list(*fields, flat=True)
+
+    @classmethod
+    def get_not_in(cls, id_field, ids):
+        ids_set = set(ids)
+        kwargs = {'%s__in' % id_field: ids}
+        exist_ids = cls.get_values_list(id_field, **kwargs)
+        return ids_set - set(exist_ids)
 
     @classmethod
     def get_pk_list(cls, **kwargs):
