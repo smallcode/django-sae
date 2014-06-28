@@ -1,11 +1,17 @@
 # coding=utf-8
-from django.db import models, IntegrityError
+from django.db import models, IntegrityError, OperationalError, connection
 from django.utils import timezone
 from django_sae.utils.decorators import retry
 import datetime
 
 DEFAULT_RETRIES = 3  # 重试次数
 DEFAULT_UPDATE_CYCLE = datetime.timedelta(weeks=1)  # 更新周期
+
+
+def close_connection(e):
+    """ Fix: '2006: MySQL server has gone away', Ref:https://code.djangoproject.com/ticket/21597#comment:29
+    """
+    connection.close()
 
 
 class RepositoryBase(object):
@@ -74,12 +80,16 @@ class RepositoryBase(object):
     def _pre_create(self, item):
         pass
 
-    def create(self, item):
-        self._pre_create(item)
+    @retry(2, OperationalError, close_connection)
+    def _try_create(self, item, fields):
         try:
-            return self.Model.objects.create(**self.to_fields(item))
+            return self.Model.objects.create(**fields)
         except IntegrityError:
             return self.update_or_create(item)
+
+    def create(self, item):
+        self._pre_create(item)
+        return self._try_create(item, self.to_fields(item))
 
     def _pre_bulk_create(self, items):
         pass
